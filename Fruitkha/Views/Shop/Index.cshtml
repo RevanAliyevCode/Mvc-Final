@@ -1,0 +1,115 @@
+﻿@using Business.ViewModels.Shop
+@model ShopVM
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Fresh and Organic</p>
+                    <h1>Shop</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- products -->
+<div class="product-section mt-150 mb-150">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-filters">
+                    <ul>
+                        <li class="active" data-filter="0">All</li>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <li data-filter="@item.Id">@item.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row product-lists">
+            @if (Model.Products.Count == 0)
+            {
+                <div class="col-md-12">
+                    <p>No products available</p>
+                </div>
+            }
+            else
+            {
+                <partial name="_ProductPartial" model="@Model.Products" />
+            }
+        </div>
+    </div>
+</div>
+<!-- end products -->
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.product-filters ul li').on('click', function () {
+                $('.product-filters ul li').removeClass('active');
+                $(this).addClass('active');
+
+                var selector = $(this).data('filter');
+                $.ajax({
+                    url: '/Shop/FilterByCategory',
+                    type: 'POST',
+                    data: { categoryId: selector },
+                    success: function (response) {
+                        $('.product-lists').html(response);
+                        $('.product-lists').isotope('destroy');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".add-to-cart-button").on("click", function () {
+                var productId = $(this).data("product-id");
+
+                $.ajax({
+                    url: "/Basket/AddToBasket",
+                    type: "POST",
+                    data: { productId: productId },
+                    success: function (response) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    },
+                    error: function (xhr) {
+                        var errorMessage = xhr.responseText || "Something went wrong.";
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Error!",
+                            text: errorMessage,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    },
+                });
+            });
+        });
+    </script>
+}

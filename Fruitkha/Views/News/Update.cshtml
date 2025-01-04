@@ -1,0 +1,54 @@
+﻿@using Business.ViewModels.News
+@model UpdateNewsVM
+
+@{
+    ViewData["Title"] = "Update news";
+}
+
+
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>News</p>
+                    <h1>Update news form</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="contact-from-section mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 mb-5 mb-lg-0">
+                <div class="form-title">
+                    <h2>Update your news</h2>
+                </div>
+                <div id="form_status"></div>
+                <div class="contact-form">
+                    <form type="POST" asp-controller="News" asp-action="Update" enctype="multipart/form-data">
+                        <p>
+                            <input type="text" placeholder="Title" asp-for="Title">
+                            <span style="color: red;" asp-validation-for="Title"></span>
+                        </p>
+                        <p>
+                            <img src="~/upload/news/@Model.ImageUrl" class="mb-5">
+                            <input type="file" placeholder="Image file" asp-for="Image">
+                            <span style="color: red;" asp-validation-for="Image"></span>
+                        </p>
+                        <p>
+                            <textarea asp-for="Content" cols="30" rows="10" placeholder="Content"></textarea>
+                            <span style="color: red;" asp-validation-for="Content"></span>
+                        </p>
+                        <p>
+                            <input type="submit" value="Update">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+﻿@using Business.ViewModels.Admin.Category
+@model CategoryCommandVM
+
+<form asp-controller="Category" asp-action="Update" method="post" class="p-4">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input type="text" class="form-control" asp-for="Name" placeholder="Category name">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

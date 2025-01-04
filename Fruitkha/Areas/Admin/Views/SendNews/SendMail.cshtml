@@ -1,0 +1,12 @@
+﻿<form asp-controller="SendNews" asp-action="SendMail" method="post" class="p-4">
+    <div class="mb-3">
+        <label for="subject" class="form-label">Subject</label>
+        <input class="form-control" type="text" name="subject" id="subject">
+    </div>
+    <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <textarea class="form-control" id="message" name="message" placeholder="Write message"></textarea>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>

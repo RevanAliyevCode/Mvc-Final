@@ -1,0 +1,123 @@
+﻿@using Business.ViewModels.News
+@model NewsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    var months = new string[] { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+"October", "November", "December" };
+}
+
+<!-- breadcrumb-section -->
+<div class="breadcrumb-section breadcrumb-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center">
+                <div class="breadcrumb-text">
+                    <p>Read the Details</p>
+                    <h1>Single Article</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumb section -->
+
+<!-- single article section -->
+<div class="mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-article-section">
+                    <div class="single-article-text">
+                        <div class="single-artcile-bg"
+                            style="background-image: url('@Url.Content("~/upload/news/" + Model.ImageName)');">
+                        </div>
+                        <p class="blog-meta">
+                            <span class="author"><i class="fas fa-user"></i> @Model.UserName</span>
+                            <span class="date"><i class="fas fa-calendar"></i> @Model.CreatedAt.DayOfYear
+                                @months[Model.CreatedAt.Month - 1], @Model.CreatedAt.Year</span>
+                        </p>
+                        <h2>@Model.Title</h2>
+                        <p>@Model.Content</p>
+                    </div>
+
+                    @if (Model.UserName == User.Identity.Name)
+                    {
+                        <div class="single-article-footer mt-150">
+                            <a href="@Url.Action("Update", "News", new { id = Model.Id })" class="btn btn-primary">Edit</a>
+                            <a href="@Url.Action("Delete", "News", new { id = Model.Id })" class="btn btn-danger">Delete</a>
+                        </div>
+                    }
+
+                    <div class="comments-list-wrap">
+                        <h3 class="comment-count-title">@Model.Comments.Count Comments</h3>
+                        @if (Model.Comments.Count == 0)
+                        {
+                            <p>No comments available</p>
+                        }
+                        else
+                        {
+                            <div class="comment-list">
+                                @foreach (var comment in Model.Comments)
+                                {
+                                    <div class="single-comment-body">
+                                        <div class="comment-user-avater">
+                                            <img src="~/assets/img/avaters/avatar1.png" alt="">
+                                        </div>
+                                        <div class="comment-text-body">
+                                            <h4>@comment.UserName <span class="comment-date">@comment.CreatedAt.DayOfYear
+                                                    @months[comment.CreatedAt.Month - 1], @comment.CreatedAt.Year</span>
+                                            </h4>
+                                            <p>@comment.Content</p>
+                                            @* <!-- Reply form --> *@
+                                            <form method="POST" asp-controller="News" asp-action="WriteReply"
+                                                asp-route-commentId="@comment.Id" asp-route-newsId="@Model.Id"
+                                                class="d-flex align-items-center">
+                                                <textarea name="reply" id="reply" cols="30" rows="2"
+                                                    placeholder="Your Reply"></textarea>
+                                                <input type="submit" value="Reply" class="ml-3">
+                                                <div asp-validation-summary="All" style="color: red;"></div>
+                                            </form>
+                                        </div>
+                                        @foreach (var reply in comment.Replies)
+                                        {
+                                            <div class="single-comment-body child">
+                                                <div class="comment-user-avater">
+                                                    <img src="~/assets/img/avaters/avatar3.png" alt="">
+                                                </div>
+                                                <div class="comment-text-body">
+                                                    <h4>@reply.UserName <span class="comment-date">@reply.CreatedAt.DayOfYear
+                                                            @months[reply.CreatedAt.Month - 1], @reply.CreatedAt.Year</span>
+                                                    </h4>
+                                                    <p>@reply.Content</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="comment-template">
+                        <h4>Leave a comment</h4>
+                        <p>If you have a comment dont feel hesitate to send us your opinion.</p>
+                        <form method="POST" asp-controller="News" asp-action="WriteComment"
+                            asp-route-newsId="@Model.Id">
+                            <p>
+                                <textarea name="comment" id="comment" cols="30" rows="10"
+                                    placeholder="Your Message"></textarea>
+                                <span asp-validation-summary="All" style="color: red;"></span>
+                            </p>
+                            <p>
+                                <input type="submit" value="Submit">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end single article section -->
