@@ -5,8 +5,8 @@ namespace Business.ViewModels.Account;
 
 public class ResetPasswordVM
 {
-    public string Email { get; set; }
-    public string Token { get; set; }
+    public string? Email { get; set; }
+    public string? Token { get; set; }
     [Required(ErrorMessage = "Password is required")]
     [DataType(DataType.Password)]
     public string NewPassword { get; set; }
